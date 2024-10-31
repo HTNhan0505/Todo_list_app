@@ -10,6 +10,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _text = TextEditingController();
+  bool _validate = false;
+
   List toDoList = [
     ['Test eyeq Tech company', false],
     ['Build to do list app', false]
@@ -22,9 +24,22 @@ class _HomePageState extends State<HomePage> {
   }
 
   void createNewTab() {
+    if(_text.text.isEmpty) {
+      setState(() {
+        _validate = true;
+      });
+    } else {
+      setState(() {
+        _validate = false;
+        toDoList.add([_text.text, false]);
+        _text.clear();
+      });
+    }
+  }
+
+  void deleteTask(int index) {
     setState(() {
-      toDoList.add([_text.text,false]);
-      _text.clear();
+      toDoList.removeAt(index);
     });
   }
 
@@ -45,19 +60,21 @@ class _HomePageState extends State<HomePage> {
               taskName: toDoList[index][0],
               isCompleted: toDoList[index][1],
               onChanged: (value) => checkBoxChanged(index),
+              handleDelete: () => deleteTask(index),
             );
           }),
       floatingActionButton: Row(
         children: [
           Expanded(
               child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 30),
             child: TextField(
               controller: _text,
               decoration: InputDecoration(
                   hintText: 'Add your new task',
                   filled: true,
-                  fillColor: Colors.amber.shade300,
+                  fillColor: Colors.white,
+                  errorText: _validate ? "Value Can't Be Empty" : null,
                   enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(color: Colors.black),
                       borderRadius: BorderRadius.circular(15))),

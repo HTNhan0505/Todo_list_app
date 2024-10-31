@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TodoItem extends StatelessWidget {
   const TodoItem(
       {super.key,
       required this.taskName,
       required this.isCompleted,
-      this.onChanged});
+      required this.onChanged, required this.handleDelete,
+      });
 
   final String taskName;
   final bool isCompleted;
   final Function(bool?)? onChanged;
+  final VoidCallback  handleDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +25,7 @@ class TodoItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Checkbox(
               value: isCompleted,
@@ -40,6 +44,11 @@ class TodoItem extends StatelessWidget {
                       : TextDecoration.none,
                   decorationColor: Colors.black,
                   decorationThickness: 3),
+            ),
+            IconButton(
+              iconSize: 32,
+              icon: const Icon(Icons.delete),
+              onPressed: handleDelete,
             ),
           ],
         ),
